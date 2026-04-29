@@ -5,3 +5,6 @@ This repository will contain the source code for my work throughout the course.
 
 ### Clipped
 This program generates a 1 second 440 Hz sine wave using a 48000 Hz sample rate and writes it to a WAV file. It then creates a second version of the signal with a higher amplitude and applies hard clipping at ±8192. The resulting signals are saved as separate WAV files and the clipped version is played back using the sounddevice library. The clipping succesfully produced visible change in the sine wav as seen with Audacity. 
+
+### Modem
+This program decodes a message encoded as audio using the Bell 103 modem protocol. It reads a 48 kHz mono WAV file and converts the samples to floating point, then detects whether each 160-sample bit window contains the mark frequency (2025 Hz) or space frequency (2225 Hz). The resulting bit stream is grouped together and the remaining data bits are assembled into ASCII characters. The decoded message is then saved to a text file and printed to the terminal.
