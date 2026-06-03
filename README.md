@@ -8,3 +8,6 @@ This program generates a 1 second 440 Hz sine wave using a 48000 Hz sample rate 
 
 ### Modem
 This program decodes a message encoded as audio using the Bell 103 modem protocol. It reads a 48 kHz mono WAV file and converts the samples to floating point, then detects whether each 160-sample bit window contains the mark frequency (2025 Hz) or space frequency (2225 Hz). The resulting bit stream is grouped together and the remaining data bits are assembled into ASCII characters. The decoded message is then saved to a text file and printed to the terminal.
+
+### Aleatoric
+This program generates aleatoric music by randomly selecting a key, tempo, song structure, and chord progressions, then synthesizing a melody using sawtooth waves. Notes are chosen from the current chord 80% of the time and from the major scale otherwise. Two optional extensions were implemented: `--bass` adds a whole note bass line two octaves below the chord root, and `--harmony` which plays the closest chord note below the melody. Other optional add ons, such as rhythm, drums, and midi, were not implemented. 
