@@ -5,7 +5,6 @@ import argparse
 
 SAMPLERATE = 48000
 
-# All notes from A3 to A4 as frequencies
 NOTE_FREQS = {
     'A3':  220.00,
     'A#3': 233.08,
@@ -22,17 +21,8 @@ NOTE_FREQS = {
     'A4':  440.00,
 }
 
-# major scale intervals in semitones from root
-# 1  2  3  4  5  6  7
 MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11]
 
-def semitones_up(freq, semitones):
-    return freq * (2 ** (semitones / 12))
-
-def get_scale(root_freq):
-    return [semitones_up(root_freq, i) for i in MAJOR_INTERVALS]
-
-# scale degree index for each roman num
 SCALE_DEGREE = {
     'I':   0,
     'ii':  1,
@@ -44,20 +34,10 @@ SCALE_DEGREE = {
     'vii': 6,
 }
 
-# chord shapes
-# major: root, maj 3rd, perf 5th
-# minor: root, min 3rd, perf 5th
 MAJOR_CHORD = [0, 4, 7]
 MINOR_CHORD = [0, 3, 7]
 
-# minor chord numerals
 MINOR_NUMERALS = {'ii', 'iii', 'iv', 'vi'}
-
-def get_chord_freqs(numeral, scale, root_freq):
-    degree = SCALE_DEGREE[numeral]
-    chord_root = scale[degree]
-    shape = MINOR_CHORD if numeral in MINOR_NUMERALS else MAJOR_CHORD
-    return [semitones_up(chord_root, i) for i in shape]
 
 SONG_STRUCTURES = [
     "AABBCC",
@@ -78,13 +58,31 @@ CHORD_LOOPS = [
     ['vi', 'IV', 'I', 'V'],
 ]
 
+
+def semitones_up(freq, semitones):
+    return freq * (2 ** (semitones / 12))
+
+
+def get_scale(root_freq):
+    return [semitones_up(root_freq, i) for i in MAJOR_INTERVALS]
+
+
+def get_chord_freqs(numeral, scale, root_freq):
+    degree = SCALE_DEGREE[numeral]
+    chord_root = scale[degree]
+    shape = MINOR_CHORD if numeral in MINOR_NUMERALS else MAJOR_CHORD
+    return [semitones_up(chord_root, i) for i in shape]
+
+
 def assign_loops(structure):
     labels = list(dict.fromkeys(structure))
     loops = random.sample(CHORD_LOOPS, len(labels))
     return {label: loop for label, loop in zip(labels, loops)}
 
+
 def expand_structure(structure, label_to_loop):
     return [label_to_loop[label] for label in structure]
+
 
 tempo = random.randint(80, 160)
 beats_per_measure = 4
@@ -97,6 +95,7 @@ seconds_per_eighth = seconds_per_beat / 2
 
 samples_per_eighth = int(SAMPLERATE * seconds_per_eighth)
 
+
 def sawtooth(freq, num_samples):
     t = np.linspace(0, num_samples / SAMPLERATE, num_samples, endpoint=False)
     wave = np.zeros(num_samples)
@@ -108,6 +107,7 @@ def sawtooth(freq, num_samples):
         wave += np.sin(2 * np.pi * harmonic_freq * t) / harmonic
         harmonic += 1
     return wave
+
 
 def normalize(wave, amplitude=0.8):
     peak = np.max(np.abs(wave))
